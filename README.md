@@ -17,3 +17,117 @@ opencv_world340d.lib
 * 保存之后回到代码编辑界面，因为vs新版之后都是默认将包含文件放在stdafx.h中，所以与示例文件有点不同
 [示例代码](https://github.com/opencv/opencv/blob/master/samples/cpp/tutorial_code/introduction/windows_visual_studio_opencv/introduction_windows_vs.cpp#L1)
 * 将上面的include和using全部添加进stdafx.h，剩下的代码全都复制粘贴进项目的主代码文件中
+## 快速入门系列
+首先了解下cv中的一些常用的class
+* 读取一张图片
+```c++
+Mat cv::imread 
+(
+const String & 
+filename, 
+
+
+int 
+flags = IMREAD_COLOR 
+
+)
+
+```
+说明：Mat在cv中是一个矩阵，因为图片以矩阵的方式存储（如果是按位存储的话）
+,即cv::imread()默认返回是一个矩阵，代表了图片，flag默认为彩色模式，如果需要更改图片的读取模式可以修改flag		
+[cv::imread](https://docs.opencv.org/3.4.1/d4/da8/group__imgcodecs.html)
+* 显示一个窗口（为了显示图片做准备）
+```c++
+void cv::namedWindow 
+(
+const String & 
+winname, 
+
+
+int 
+flags = WINDOW_AUTOSIZE 
+
+)
+
+
+Python:
+
+None
+=
+cv.namedWindow(
+winname[, flags]
+)
+```
+
+* 显示一张图片
+```c++
+void cv::imshow 
+(
+const String & 
+winname, 
+
+
+InputArray 
+mat 
+
+)
+```
+显示一张图片，但是这张图片可能只能显示部分大小，而不是按照完全的大小显示
+如果要显示一张完全的图片并且可以调整显示的窗口大小，则在call nameWindow时使用cv::WINDOW_AUTOSIZE标签		
+[有关窗口操作的参考](https://docs.opencv.org/3.4.1/d7/dfc/group__highgui.html#ga5afdf8410934fd099df85c75b2e0888b)
+* 打开电脑自带摄像头(需要了解下什么是videoCapture)
+```c++
+cv::VideoCapture::VideoCapture 
+(
+int 
+index
+)
+
+Python:
+
+<VideoCapture object>
+=
+cv.VideoCapture(
+
+)
+
+<VideoCapture object>
+=
+cv.VideoCapture(
+filename
+)
+
+<VideoCapture object>
+=
+cv.VideoCapture(
+filename, apiPreference
+)
+
+<VideoCapture object>
+=
+cv.VideoCapture(
+index
+)
+```
+此处的videoCapture()可以打开默认的摄像头，但是同样也需要建立一个窗口用来显示，获得的视频流用Mat表示，但是打开一个视频
+端口需要声明一个VideoCapture的类来表示，即要用到VideoCapture和Mat两种数据类型
+[打开摄像头示例](https://docs.opencv.org/3.4.1/d8/dfe/classcv_1_1VideoCapture.html#details)
+* 打开外接的摄像头
+```c++
+cv::VideoCapture::VideoCapture 
+(
+const String & 
+filename, 
+
+
+int 
+apiPreference 
+
+)
+```
+这里的启动函数与上面的打开笔记本电脑自带的摄像头类似，只是因为传入的参数发生了改变，是重载函数，这里的filename决定了
+视频的来源是什么，如果是视频文件，则是播放视频；如果是一系列的图片，则是类似于播放gif一样；如果是url则代表的是
+网络摄像头；如果是视频流，则显示的是该视频流的内容
+* 动作分析(不知道干啥和如何用的，暂时mark)
+[motion analysis](https://docs.opencv.org/3.4.1/d7/de9/group__video.html)
+## 较为系统且完整的学习请看官方tutorial
