@@ -235,3 +235,182 @@ dst=morphgrad(src,element)=dilate(src,element)−erode(src,element)
 是输入图像和opening操作后的图像的不同
 * Black Hat		
 是输入图像和closing操作后的图像的不同
+* Hit-Miss Theory		
+此理论是用来查找那些四个方向上有特定的patten的点，并把它们筛选出来，[详见](https://docs.opencv.org/master/db/d06/tutorial_hitOrMiss.html)
+* 图像金字塔(Image Pyramids)		
+在现实中我们可能用到图像金字塔的技术来还原或者压缩图像，压缩一个图像是，我们是把原图像放在一个高斯核上进行处理，并把非数字的像素点丢弃，
+产生新的一层图像（变成原图的1/4），依次不断重复对每一新层进行处理，知道我们得到一个所需要的点为止，所构成的多福图像就像是金字塔一样。
+如果需要扩展则方向使用拉普拉斯变换
+* 阈值操作		
+适用于分离前景和背景，通过对图像中超过或者低于一定数值的像素进行操作，替换成为特定值
+* 对图像梯度计算的重要性		
+对图像的梯度计算能够让我们找出在图像中像素点突变的地方，这些像素突变的地方一般都是物体的边缘（假设物体是一个均一
+颜色，并且与背景不同），利用梯度可以观察到物体的边缘，故用于物体检测。		
+计算梯度有分横向和纵向，两个方向均有不同的核（但是旋转是一致的）来进行处理。我们可以用取模的方式来计算两个方向
+的合梯度。当核的大小为3时，我们使用Scharr()而不是Sobel()来计算。在对图像求梯度之前可以先用高斯模糊先消去噪点
+然后再对图像求梯度。		
+更进一步地！我们可以知道在数学上如果一个函数存在极值点，则它的导数为0，相应地，我们取图像边缘时是取像素变化的最大
+处，类推可得，对图像求两次梯度可以也可以得到图像边缘，opencv中用Laplacian（）可以解决这点。
+* 对直线和圆的识别
+对直线的识别是通过画一条直线，计算与该直线的交点数量来判断是否为直线，圆也类似。操作步骤为：导入图像，对图像
+进行高斯核处理，消除噪点，根据边缘分割算法对物体的边缘进行判断，做直线拟合。
+* remapping		
+实际上就是旋转和堆成操作
+* affine remapping		
+三维旋转对称操作
+* 图像直方图计算（重要！特征识别的重要依据）		
+一个图像是由很多种颜色构成的，如果对每个像素点的颜色进行统计，则会得到一张统计表，横轴为颜色，纵轴为出现的次数，
+这就是直方图。直方图常常用来表示一个特征的信息。获得的直方图信息是MatND类型或者是直接Mat类型	
+常用的对直方图的操作有：
+1.对直方图进行拉伸
+```c++
+void cv::equalizeHist 
+(
+InputArray 
+src, 
+
+
+OutputArray 
+dst 
+
+)
+```
+而且是直接对图像进行操作了，输入的是图像，返回的也是图像
+2.计算图像的直方图信息
+```c++
+void cv::calcHist 
+(
+const Mat * 
+images, 
+
+
+int 
+nimages, 
+
+
+const int * 
+channels, 
+
+
+InputArray 
+mask, 
+
+
+OutputArray 
+hist, 
+
+
+int 
+dims, 
+
+
+const int * 
+histSize, 
+
+
+const float ** 
+ranges, 
+
+
+bool 
+uniform = true, 
+
+
+bool 
+accumulate = false 
+
+)
+```
+3.对直方图信息进行比较
+```c++
+double cv::compareHist 
+(
+InputArray 
+H1, 
+
+
+InputArray 
+H2, 
+
+
+int 
+method 
+
+)
+```
+使用的是统计学中的标准差的概念来计算的
+4.数字化
+```c++
+static Vec<_Tp, cn> cv::normalize 
+(
+const Vec< _Tp, cn > & 
+v
+)
+```
+* 对于特征的识别		
+通过对直方图信息的比较来比较两幅图像的相似性，可以忽略目标的放置角度变换，但是视角有限制
+```c++
+void cv::calcBackProject 
+(
+const Mat * 
+images, 
+
+
+int 
+nimages, 
+
+
+const int * 
+channels, 
+
+
+InputArray 
+hist, 
+
+
+OutputArray 
+backProject, 
+
+
+const float ** 
+ranges, 
+
+
+double 
+scale = 1, 
+
+
+bool 
+uniform = true 
+
+)
+```
+这是back project（中文不知道该怎么翻译）是用来匹配原图片与所给图片的，运用的是直方图分析的方法
+* template matching（模板匹配）
+```c++
+void cv::matchTemplate 
+(
+InputArray 
+image, 
+
+
+InputArray 
+templ, 
+
+
+OutputArray 
+result, 
+
+
+int 
+method, 
+
+
+InputArray 
+mask = noArray() 
+
+)
+```
+此处的模板匹配法有很多种方法，有些是通过蒙板的，有些不是。主要的方法是将小块的特征在待匹配图片上滑动，每次
+滑动都计算直方图的相似性，直到整幅图滑动完成，找到相似性最高的一点，就是特征所在位置
+
