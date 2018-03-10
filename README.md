@@ -413,4 +413,53 @@ mask = noArray()
 ```
 此处的模板匹配法有很多种方法，有些是通过蒙板的，有些不是。主要的方法是将小块的特征在待匹配图片上滑动，每次
 滑动都计算直方图的相似性，直到整幅图滑动完成，找到相似性最高的一点，就是特征所在位置
+* 轮廓绘图
+```c++
+void cv::findContours 
+(
+InputOutputArray 
+image, 
 
+
+OutputArrayOfArrays 
+contours, 
+
+
+OutputArray 
+hierarchy, 
+
+
+int 
+mode, 
+
+
+int 
+method, 
+
+
+Point 
+offset = Point() 
+
+)
+```
+* 计算凸包
+```c++
+void cv::convexHull 
+(
+InputArray 
+points, 
+
+
+OutputArray 
+hull, 
+
+
+bool 
+clockwise = false, 
+
+
+bool 
+returnPoints = true 
+
+)
+```
