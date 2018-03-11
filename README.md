@@ -17,6 +17,7 @@ opencv_world340d.lib
 * 保存之后回到代码编辑界面，因为vs新版之后都是默认将包含文件放在stdafx.h中，所以与示例文件有点不同
 [示例代码](https://github.com/opencv/opencv/blob/master/samples/cpp/tutorial_code/introduction/windows_visual_studio_opencv/introduction_windows_vs.cpp#L1)
 * 将上面的include和using全部添加进stdafx.h，剩下的代码全都复制粘贴进项目的主代码文件中
+* 关于特征，[详见](https://github.com/as20aa/opencv_test/tree/feature/Feature)
 ## 快速入门系列
 首先了解下cv中的一些常用的class
 * 读取一张图片
